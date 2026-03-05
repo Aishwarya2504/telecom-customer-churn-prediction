@@ -1,5 +1,6 @@
 import streamlit as st
 import pandas as pd
+import joblib
 from sklearn.ensemble import RandomForestClassifier
 
 # Page configuration
@@ -9,7 +10,7 @@ st.set_page_config(
     layout="wide"
 )
 
-# Dark UI styling (without styling the metric box)
+# Dark theme styling
 st.markdown("""
 <style>
 body {
@@ -32,10 +33,9 @@ st.image(
 
 st.markdown("---")
 
-# Load dataset
+# Load dataset (for feature importance only)
 df = pd.read_csv("data/churn.csv")
 
-# Data preprocessing
 df["TotalCharges"] = pd.to_numeric(df["TotalCharges"], errors="coerce")
 df = df.dropna()
 df = df.drop("customerID", axis=1)
@@ -43,13 +43,18 @@ df = df.drop("customerID", axis=1)
 df["Churn"] = df["Churn"].map({"Yes":1, "No":0})
 df = pd.get_dummies(df, drop_first=True)
 
-# Split features and target
 X = df.drop("Churn", axis=1)
 y = df["Churn"]
 
-# Train model
-model = RandomForestClassifier(n_estimators=200, random_state=42)
-model.fit(X, y)
+# LOAD SAVED MODEL
+try:
+    model = joblib.load("models/churn_model.pkl")
+    X_columns = joblib.load("models/model_columns.pkl")
+except:
+    # fallback if model not saved yet
+    model = RandomForestClassifier(n_estimators=200, random_state=42)
+    model.fit(X, y)
+    X_columns = X.columns
 
 # Feature importance
 importance = pd.DataFrame({
@@ -80,12 +85,12 @@ with col2:
         "TotalCharges":[total_charges]
     })
 
-    # Align columns with training data
-    for col in X.columns:
+    # Align columns with model
+    for col in X_columns:
         if col not in input_data.columns:
             input_data[col] = 0
 
-    input_data = input_data[X.columns]
+    input_data = input_data[X_columns]
 
     prediction = model.predict(input_data)
     probability = model.predict_proba(input_data)
@@ -98,14 +103,12 @@ with col2:
         st.success("✅ Customer likely to stay")
 
     st.metric("Churn Probability", f"{prob}%")
-
     st.progress(prob/100)
 
 st.markdown("---")
 
 # Feature importance chart
 st.subheader("Key Factors Influencing Churn")
-
 st.bar_chart(importance.head(10).set_index("Feature"))
 
 st.markdown("---")
@@ -120,5 +123,5 @@ The prediction model uses a **Random Forest machine learning algorithm** trained
 
 Analysis of the dataset shows that churn is strongly associated with shorter customer tenure, higher monthly charges, fiber optic internet services, and certain payment methods.
 
-This type of predictive system can help telecom companies identify at-risk customers early and apply targeted retention strategies such as service improvements, loyalty offers, or personalized plans.
+This predictive system can help telecom providers identify customers at risk and implement proactive retention strategies.
 """)
