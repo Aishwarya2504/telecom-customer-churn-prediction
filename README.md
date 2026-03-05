@@ -41,3 +41,7 @@ Clone the repository:
 
 ```bash
 git clone https://github.com/Aishwarya2504/telecom-customer-churn-prediction.git
+
+## 📸 Dashboard Preview
+
+![Dashboard Screenshot](dashboard.png)
