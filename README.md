@@ -47,22 +47,15 @@ pip install -r requirements.txt
 
 3️⃣ Run the Streamlit dashboard
 python -m streamlit run app.py
-📸 Dashboard Preview
 
 🔍 Model Insights
 
 The analysis shows that the most influential factors affecting churn include:
-
 Customer tenure
-
 Monthly charges
-
 Total charges
-
 Internet service type
-
 Payment method
-
 These insights help telecom providers identify high-risk customers and implement retention strategies.
 
 👩‍💻 Author
