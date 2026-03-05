@@ -37,11 +37,35 @@ This project builds a predictive model using the **Random Forest algorithm** and
 
 ## 🚀 How to Run the Project
 
-Clone the repository:
+### 1️⃣ Clone the repository
 
 ```bash
 git clone https://github.com/Aishwarya2504/telecom-customer-churn-prediction.git
 
-## 📸 Dashboard Preview
+2️⃣ Install dependencies
+pip install -r requirements.txt
 
-![Dashboard Screenshot](dashboard.png)
+3️⃣ Run the Streamlit dashboard
+python -m streamlit run app.py
+📸 Dashboard Preview
+
+🔍 Model Insights
+
+The analysis shows that the most influential factors affecting churn include:
+
+Customer tenure
+
+Monthly charges
+
+Total charges
+
+Internet service type
+
+Payment method
+
+These insights help telecom providers identify high-risk customers and implement retention strategies.
+
+👩‍💻 Author
+
+Aishwarya Durga
+Computer Science Student | Machine Learning Enthusiast
